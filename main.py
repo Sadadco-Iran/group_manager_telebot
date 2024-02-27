@@ -1,9 +1,8 @@
-12import `telebot
+import telebot
 from telebot import types
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
 from config import *
 import datetime
-from telegram import Bot
 bot = telebot.TeleBot(token)
 
 admin = [6380845241]
@@ -32,6 +31,27 @@ def restrictt(m):
 
 
     )
+
+@bot.message_handler(func=lambda m:m.text.startswith('پاکسازی '))
+def koll(message):
+    if int(message.from_user.id) in admin:
+        ted = int(message.text.split()[-1])
+
+
+    if 0 < int(ted) <= 1000:
+        bot.send_message(message.chat.id, "لطفا صبور باشید", reply_to_message_id=message.id, parse_mode='HTML')
+        for i in range(message.id - int(ted), message.id + 1):
+            try:
+                bot.delete_message(message.chat.id, i)
+            except:
+                pass
+        bot.send_message(message.chat.id, "» تعداد %d پیام با موفقیت پاکسازی شد" % int(ted), parse_mode='HTML')
+    else:
+        bot.send_message(message.chat.id, " تعداد باید بین 1 تا 1000 باشد.", reply_to_message_id=message.id, parse_mode='HTML')
+
+
+
+
 @bot.message_handler(func=lambda m:True)
 def text_tp(m):
     if int(m.from_user.id) in admin:
